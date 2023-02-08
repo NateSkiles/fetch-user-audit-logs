@@ -2,7 +2,8 @@ require('dotenv').config()
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const baseUrl = 'https://api.kustomerapp.com'
-const reqUrl = `/v1/audit-logs?filter[objectType]=work_session&filter[userId]=6142bf34def7f9001a1373f8`
+const userId = '6142bf34def7f9001a1373f8'
+const reqUrl = `/v1/audit-logs?filter[objectType]=work_session&filter[userId]=${userId}`
 const reqOpts = {
     method: 'GET',
     headers: {
