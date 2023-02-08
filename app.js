@@ -2,6 +2,19 @@ const readlineSync = require('readline-sync')
 require('dotenv').config()
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
 
+
+// Add additional headers here
+const header = [
+    { id: 'id', title: 'id' },
+    { id: 'attributes.userType', title: 'User Type' },
+    { id: 'attributes.objectType', title: 'Type' },
+    { id: 'attributes.client', title: 'client' },
+    { id: 'attributes.changes.relationships.status.before', title: 'Status > Before' },
+    { id: 'attributes.changes.relationships.status.after', title: 'Status > After' },
+    { id: 'attributes.createdAt', title: 'Created At' },
+    { id: 'attributes.publishedAt', title: 'Published At' }
+]
+
 const reqOpts = {
     method: 'GET',
     headers: {
@@ -10,9 +23,10 @@ const reqOpts = {
     }
 }
 
+
 const csvWriter = createCsvWriter({
     path: `./output/${new Date().toISOString()}.csv`,
-    header: ['id', 'attributes.userType', 'attributes.objectType', 'attributes.client', 'attributes.changes.relationships.status.before', 'attributes.changes.relationships.status.after', 'attributes.createdAt', 'attributes.publishedAt'].map((item) => ({ id: item, title: item })),
+    header,
     headerIdDelimiter: '.'
 })
 
