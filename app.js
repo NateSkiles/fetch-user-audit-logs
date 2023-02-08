@@ -1,9 +1,7 @@
+const readlineSync = require('readline-sync')
 require('dotenv').config()
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const createCsvWriter = require('csv-writer').createObjectCsvWriter
 
-const baseUrl = 'https://api.kustomerapp.com'
-const userId = '6142bf34def7f9001a1373f8'
-const reqUrl = `/v1/audit-logs?filter[objectType]=work_session&filter[userId]=${userId}`
 const reqOpts = {
     method: 'GET',
     headers: {
@@ -18,10 +16,14 @@ const csvWriter = createCsvWriter({
     headerIdDelimiter: '.'
 })
 
-const fetchData = async () => {
+const fetchData = async (id) => {
+    const baseUrl = 'https://api.kustomerapp.com'
+    const endPointUrl = `/v1/audit-logs`
+    const queryStr = `?filter[objectType]=work_session&filter[userId]=${id}`
+    const reqUrl = baseUrl + endPointUrl + queryStr
     let data = [];
     try {
-        const response = await fetch(baseUrl + reqUrl, reqOpts).then((res) => res.json());
+        const response = await fetch(reqUrl, reqOpts).then((res) => res.json());
         data = data.concat(response.data)
         console.log(`Initial: ${data.length} Records`);
         const cursorCount = response.meta.cursorCount
@@ -41,8 +43,12 @@ const fetchData = async () => {
 }
 
 const main = async () => {
-    const data = await fetchData()
-    const filteredData = data.filter((el) => el.attributes.userType === 'user')
+    const userId = readlineSync.question('Please enter a User ID: ')
+
+    const data = await fetchData(userId)
+    const filteredData = data.filter((el) => {
+        if (el.attributes.changes?.relationships?.status?.before && el.attributes.userType === 'user') { return true }
+    })
 
     try {
         await csvWriter.writeRecords(filteredData)
