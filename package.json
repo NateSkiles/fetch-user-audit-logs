@@ -1,0 +1,16 @@
+{
+  "name": "fetech-user-audit-logs",
+  "version": "1.0.0",
+  "description": "Fetch a users audit logs and writes data to a CSV for events where the user made changes to their status",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Nathan Skiles",
+  "license": "ISC",
+  "dependencies": {
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.0.3"
+  }
+}
